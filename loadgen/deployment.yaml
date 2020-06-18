@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotrod-loadgen
+spec:
+  selector:
+    matchLabels:
+      app: hotrod-loadgen
+  template:
+    metadata:
+      labels:
+        app: hotrod-loadgen
+    spec:
+      containers:
+        - name: loadgen
+          image: puckpuck/k6-loop
+          args:
+            - "run"
+            - "/data/script.js"
+          volumeMounts:
+            - name: script
+              mountPath: /data
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"              
+      volumes:
+        - name: script
+          configMap:
+            name: hotrod-loadgen
