@@ -1,0 +1,45 @@
+# More examples of Codefresh YAML can be found at
+# https://codefresh.io/docs/docs/yaml-examples/examples/
+
+version: "1.0"
+# Stages can help you organize your steps in stages
+stages:
+  - "clone"
+  - "build"
+  - "deploy"
+
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "puckpuck/hotrod"
+    # CF_BRANCH value is auto set when pipeline is triggered
+    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+    revision: "${{CF_BRANCH}}"
+    git: "github-1"
+    stage: "clone"
+    
+  compile:
+    title: "Compile go code"
+    image: "golang:1.14" # The image in which command will be executed
+    working_directory: "${{clone}}" # Running command where code cloned
+    environment:
+      - GOPATH=/codefresh/volume/go
+      - CGO_ENABLED=0
+    commands:
+      - "go build -o bin/hotrod ."
+    stage: "build"    
+
+  build:
+    title: "Building Docker image"
+    type: "build"
+    stage: "build"
+    working_directory: "${{clone}}"
+    arguments:
+      image_name: puckpuck/hotrod
+      tag: 0.1.3
+      dockerfile: Dockerfile
+      registry: dockerhub
+
+
+
