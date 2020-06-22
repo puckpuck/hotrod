@@ -37,7 +37,7 @@ var (
 
 	// MySQLMutexDisabled controls whether there is a mutex guarding db query execution.
 	// When not disabled it simulates a misconfigured connection pool of size 1.
-	MySQLMutexDisabled = false
+	MySQLMutexDisabled = true
 
 	// 'driver' service
 
