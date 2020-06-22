@@ -30,7 +30,7 @@ var (
 
 	// MySQLGetDelay is how long retrieving a customer record takes.
 	// Using large value mostly because I cannot click the button fast enough to cause a queue.
-	MySQLGetDelay = 300 * time.Millisecond
+	MySQLGetDelay = 50 * time.Millisecond
 
 	// MySQLGetDelayStdDev is standard deviation
 	MySQLGetDelayStdDev = MySQLGetDelay / 10
