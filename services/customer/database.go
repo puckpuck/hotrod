@@ -18,6 +18,7 @@ package customer
 import (
 	"context"
 	"errors"
+	"math/rand"
 
 	"github.com/opentracing/opentracing-go"
 	tags "github.com/opentracing/opentracing-go/ext"
@@ -65,6 +66,34 @@ func newDatabase(tracer opentracing.Tracer, logger log.Factory) *database {
 				Name:     "Japanese Desserts",
 				Location: "728,326",
 			},
+			"12323": {ID: "12323", Name: "Lambent Illumination", Location: "123,456"},
+			"32392": {ID: "32392", Name: "Flux Water Gear", Location: "456,678"},
+			"73451": {ID: "73451", Name: "Cipher Publishing", Location: "545,312"},
+			"55673": {ID: "55673", Name: "Erudite Learning", Location: "546,853"},
+			"44802": {ID: "44802", Name: "Quad Goals", Location: "545,385"},
+			"18745": {ID: "18745", Name: "Obelus Concepts", Location: "321,583"},
+			"23552": {ID: "23552", Name: "Zeal Wheels", Location: "879,556"},
+			"23412": {ID: "23412", Name: "Moxie Marketing", Location: "455,687"},
+			"23341": {ID: "23341", Name: "Bonefete Fun", Location: "231,159"},
+			"69420": {ID: "69420", Name: "Bravura Inc", Location: "573,456"},
+			"39001": {ID: "39001", Name: "Admire Arts", Location: "887,123"},
+			"78945": {ID: "78945", Name: "Vortex Solar", Location: "321,456"},
+			"59201": {ID: "59201", Name: "Sanguine Skincare", Location: "984,156"},
+			"20885": {ID: "20885", Name: "Epic Adventure Inc", Location: "354,159"},
+			"20482": {ID: "20482", Name: "Cogent Data", Location: "759,654"},
+			"22083": {ID: "22083", Name: "Candor Corp", Location: "489,657"},
+			"15864": {ID: "15864", Name: "Inspire Fitness Co", Location: "456,489"},
+			"34320": {ID: "34320", Name: "Strat Security", Location: "654,357"},
+			"38752": {ID: "38752", Name: "Innovation Arch", Location: "459,354"},
+			"23155": {ID: "23155", Name: "Eco Focus", Location: "153,584"},
+			"88654": {ID: "88654", Name: "Bicycles Green", Location: "784,215"},
+			"35871": {ID: "35871", Name: "Farm Coffee", Location: "658,324"},
+			"98457": {ID: "98457", Name: "Go Pastries", Location: "657,125"},
+			"64853": {ID: "64853", Name: "Micro Planes", Location: "328,125"},
+			"46321": {ID: "46321", Name: "Enhance Cars", Location: "954,236"},
+			"57319": {ID: "57319", Name: "Value Walking", Location: "958,654"},
+			"94317": {ID: "94317", Name: "Boost Fitness", Location: "326,125"},
+			"96354": {ID: "96354", Name: "Vibrance Software", Location: "125,358"},
 		},
 	}
 }
@@ -90,7 +119,11 @@ func (d *database) Get(ctx context.Context, customerID string) (*Customer, error
 	}
 
 	// simulate RPC delay
-	delay.Sleep(config.MySQLGetDelay, config.MySQLGetDelayStdDev)
+	if (customerID == "57319" || customerID == "88654") && rand.Intn(100) < 50 {
+		delay.Sleep(config.MySQLSlowCustomerDelay, config.MySQLSlowCustomerStdDev)
+	} else {
+		delay.Sleep(config.MySQLGetDelay, config.MySQLGetDelayStdDev)
+	}
 
 	if customer, ok := d.customers[customerID]; ok {
 		return customer, nil

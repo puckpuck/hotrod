@@ -39,6 +39,12 @@ var (
 	// When not disabled it simulates a misconfigured connection pool of size 1.
 	MySQLMutexDisabled = false
 
+	// MySQLSlowCustomerDelay controls the MySQL Delay to apply to select "slow" customers
+	MySQLSlowCustomerDelay = MySQLGetDelay * 5
+
+	// MySQLSlowCustomerStdDev is standard deviation
+	MySQLSlowCustomerStdDev = MySQLSlowCustomerDelay / 10
+
 	// 'driver' service
 
 	// RedisFindDelay is how long finding closest drivers takes.
