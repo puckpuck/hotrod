@@ -23,7 +23,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/uber/jaeger-lib/metrics"
 	jexpvar "github.com/uber/jaeger-lib/metrics/expvar"
-	jprom "github.com/uber/jaeger-lib/metrics/prometheus"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
@@ -31,12 +30,9 @@ import (
 )
 
 var (
-	metricsBackend string
 	logger         *zap.Logger
 	metricsFactory metrics.Factory
 
-	fixDBConnDelay         time.Duration
-	fixDBConnDisableMutex  bool
 	fixRouteWorkerPoolSize int
 
 	customerPort int
@@ -64,7 +60,6 @@ func Execute() {
 }
 
 func init() {
-	RootCmd.PersistentFlags().StringVarP(&metricsBackend, "metrics", "m", "expvar", "Metrics backend (expvar|prometheus)")
 	RootCmd.PersistentFlags().IntVarP(&fixRouteWorkerPoolSize, "fix-route-worker-pool-size", "W", 3, "Default worker pool size")
 
 	// Add flags to choose ports for services
@@ -86,24 +81,7 @@ func init() {
 
 // onInitialize is called before the command is executed.
 func onInitialize() {
-	switch metricsBackend {
-	case "expvar":
-		metricsFactory = jexpvar.NewFactory(10) // 10 buckets for histograms
-		logger.Info("Using expvar as metrics backend")
-	case "prometheus":
-		metricsFactory = jprom.New().Namespace(metrics.NSOptions{Name: "hotrod", Tags: nil})
-		logger.Info("Using Prometheus as metrics backend")
-	default:
-		logger.Fatal("unsupported metrics backend " + metricsBackend)
-	}
-	if config.MySQLGetDelay != fixDBConnDelay {
-		logger.Info("fix: overriding MySQL query delay", zap.Duration("old", config.MySQLGetDelay), zap.Duration("new", fixDBConnDelay))
-		config.MySQLGetDelay = fixDBConnDelay
-	}
-	if fixDBConnDisableMutex {
-		logger.Info("fix: disabling db connection mutex")
-		config.MySQLMutexDisabled = true
-	}
+	metricsFactory = jexpvar.NewFactory(10) // 10 buckets for histograms
 	if config.RouteWorkerPoolSize != fixRouteWorkerPoolSize {
 		logger.Info("fix: overriding route worker pool size", zap.Int("old", config.RouteWorkerPoolSize), zap.Int("new", fixRouteWorkerPoolSize))
 		config.RouteWorkerPoolSize = fixRouteWorkerPoolSize
