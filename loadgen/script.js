@@ -23,21 +23,27 @@ let customers = [12323, 32392, 73451, 55673, 44802, 18745, 23552,
   20482, 22083, 15864, 34320, 38752, 23155, 88654,
   35871, 98457, 64853, 46321, 57319, 94317, 96354,
   57319, 57319, 88654, 88654];
+let clients = {};
 
-export function setup() {
-  return {clientUUID: Math.round(Math.random() * 10000)}
-}
-
-export default function(data) {
+export default function() {
   lastRequestID++;
-  let requestID = data.clientUUID + "-" + lastRequestID;
+  let clientUUID = getClientUUID(__VU);
+  let requestID = clientUUID + "-" + lastRequestID;
   let customer = customers[Math.floor(Math.random() * customers.length)];
   let url = 'http://localhost:8080/dispatch?customer=' + customer;
   let headers = {
-      'jaeger-baggage': 'session=' + data.clientUUID + ', request=' + requestID
+      'jaeger-baggage': 'session=' + clientUUID + ', request=' + requestID, 
+      'client': clientUUID
   };
 
   let res = http.get(url, {headers: headers});
 
   sleep(Math.random() * 2);
+}
+
+function getClientUUID(vu) {
+  if (!clients[vu]) {
+    clients[vu] = Math.round(Math.random() * 10000000);
+  }
+  return clients[vu];
 }

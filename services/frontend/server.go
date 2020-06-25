@@ -84,11 +84,19 @@ func (s *Server) dispatch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	span := opentracing.SpanFromContext(ctx)
+
+	client := r.Header.Get("client")
+	if client != "" {
+		span.SetTag("client", client)
+	}
+
 	customerID := r.Form.Get("customer")
 	if customerID == "" {
 		http.Error(w, "Missing required 'customer' parameter", http.StatusBadRequest)
 		return
 	}
+	span.SetTag("customerID", customerID)
 
 	// TODO distinguish between user errors (such as invalid customer ID) and server failures
 	response, err := s.bestETA.Get(ctx, customerID)

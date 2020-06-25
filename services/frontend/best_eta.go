@@ -77,7 +77,7 @@ func (eta *bestETA) Get(ctx context.Context, customerID string) (*Response, erro
 	eta.logger.For(ctx).Info("Found customer", zap.Any("customer", customer))
 
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span.SetBaggageItem("customer", customer.Name)
+		span.SetTag("customer", customer.Name)
 	}
 
 	drivers, err := eta.driver.FindNearest(ctx, customer.Location)
