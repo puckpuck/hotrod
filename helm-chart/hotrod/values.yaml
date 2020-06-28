@@ -4,7 +4,7 @@
 
 jaegerEndpoint: http://opentelemetry-collector.olly:14268/api/traces
 
-replicaCount: 3
+replicaCount: 1
 
 image:
   repository: puckpuck/hotrod
