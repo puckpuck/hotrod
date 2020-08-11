@@ -40,7 +40,7 @@ var (
 	MySQLMutexDisabled = true
 
 	// MySQLSlowCustomerDelay controls the MySQL Delay to apply to select "slow" customers
-	MySQLSlowCustomerDelay = MySQLGetDelay * 1
+	MySQLSlowCustomerDelay = MySQLGetDelay * 5
 
 	// MySQLSlowCustomerStdDev is standard deviation
 	MySQLSlowCustomerStdDev = MySQLSlowCustomerDelay / 10
