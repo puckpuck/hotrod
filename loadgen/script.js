@@ -7,16 +7,17 @@ export let options = {
   stages: [
     {target: 3, duration: "0s"},
     {target: 5, duration: "20s"},
-    {target: 7, duration: "10s"},
+    {target: 9, duration: "10s"},
     {target: 7, duration: "4m"},
     {target: 5, duration: "15m"},
-    {target: 7, duration: "10s"},
+    {target: 8, duration: "10s"},
     {target: 7, duration: "6m"},
     {target: 5, duration: "10m"},
     {target: 3, duration: "20s"}
   ]
 }
 
+const BASE_URL = "http://localhost:8080"
 let lastRequestID = 0;
 let customers = [12323, 32392, 73451, 55673, 44802, 18745, 23552, 
   23412, 23341, 69420, 39001, 78945, 59201, 20885, 
@@ -30,10 +31,10 @@ export default function() {
   let clientUUID = getClientUUID(__VU);
   let requestID = clientUUID + "-" + lastRequestID;
   let customer = customers[Math.floor(Math.random() * customers.length)];
-  let url = 'http://localhost:8080/dispatch?customer=' + customer;
+  let url = BASE_URL + "/dispatch?customer=" + customer;
   let headers = {
-      'jaeger-baggage': 'session=' + clientUUID + ', request=' + requestID, 
-      'client': clientUUID
+      "jaeger-baggage": "session=" + clientUUID + ", request=" + requestID, 
+      "client": clientUUID
   };
 
   let res = http.get(url, {headers: headers});

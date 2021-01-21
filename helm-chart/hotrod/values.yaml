@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-jaegerEndpoint: http://opentelemetry-collector.o11y:14268/api/traces
+jaegerEndpoint: http://opentelemetry-collector:14268/api/traces
 
 replicaCount: 1
 
@@ -30,7 +30,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 80
 #  annotations:
 
