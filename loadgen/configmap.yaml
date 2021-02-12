@@ -23,7 +23,7 @@ data:
       ]
     }
 
-    const BASE_URL = "http://localhost:8080"
+    const BASE_URL = "http://hotrod"
     let lastRequestID = 0;
     let customers = [12323, 32392, 73451, 55673, 44802, 18745, 23552,
       23412, 23341, 69420, 39001, 78945, 59201, 20885,
